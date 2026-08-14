@@ -177,28 +177,62 @@ const SEED_PRODUCTS = [
 
 const STORAGE_KEY = "detodo_productos";
 
-function loadProducts() {
-  const raw = localStorage.getItem(STORAGE_KEY);
-  if (!raw) {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(SEED_PRODUCTS));
-    return [...SEED_PRODUCTS];
-  }
+async function apiGetProducts() {
   try {
-    const parsed = JSON.parse(raw);
-    return Array.isArray(parsed) ? parsed : [...SEED_PRODUCTS];
-  } catch {
-    return [...SEED_PRODUCTS];
+    const res = await fetch('/api/products');
+    if (!res.ok) throw new Error('no api');
+    const data = await res.json();
+    return Array.isArray(data) ? data : [];
+  } catch (err) {
+    return null;
   }
 }
 
-function saveProducts(products) {
+async function apiCreateProduct(product) {
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(products));
-    return true;
+    const res = await fetch('/api/products', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(product),
+    });
+    if (!res.ok) throw new Error('create failed');
+    return await res.json();
   } catch (err) {
-    alert("La foto es muy pesada y no se pudo guardar el producto (almacenamiento del navegador lleno). Usa una foto más liviana o elimina productos viejos con foto, y vuelve a intentarlo.");
+    return null;
+  }
+}
+
+async function apiDeleteProduct(id) {
+  try {
+    const res = await fetch(`/api/products/${id}`, { method: 'DELETE' });
+    return res.ok;
+  } catch (err) {
     return false;
   }
+}
+
+function loadProducts() {
+  // Try server first (async), but return cached seed immediately to render while fetching
+  const cached = localStorage.getItem(STORAGE_KEY);
+  if (cached) {
+    try { products = JSON.parse(cached); } catch (e) { products = [...SEED_PRODUCTS]; }
+  } else {
+    products = [...SEED_PRODUCTS];
+  }
+  // Fetch server products and replace if available
+  apiGetProducts().then((srv) => {
+    if (Array.isArray(srv)) {
+      products = srv;
+      try { localStorage.setItem(STORAGE_KEY, JSON.stringify(products)); } catch(e){}
+      renderCatalog();
+    }
+  });
+  return products;
+}
+
+function saveProducts(products) {
+  // Keep local copy and attempt server sync in background
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(products)); } catch(e){}
+  return true;
 }
 
 let products = loadProducts();
@@ -390,9 +424,12 @@ function renderCatalog() {
     btn.addEventListener("click", () => {
       const id = btn.dataset.delete;
       if (confirm("¿Eliminar este producto del catálogo?")) {
-        products = products.filter((p) => p.id !== id);
-        saveProducts(products);
-        renderCatalog();
+        // Try delete on server, fallback to local
+        apiDeleteProduct(id).then((ok) => {
+          products = products.filter((p) => p.id !== id);
+          saveProducts(products);
+          renderCatalog();
+        });
       }
     });
   });
@@ -566,20 +603,22 @@ function initModalEvents() {
       colors: colors.length ? colors : undefined,
       custom: true,
     };
-
+    // Optimistic UI: add locally, then try to create on server
     const previousProducts = products.slice();
     products = [newProduct, ...products];
-    const saved = saveProducts(products);
-    if (!saved) {
-      products = previousProducts;
-      return;
-    }
+    saveProducts(products);
 
-    // Confirmación visible
-    try {
-      alert("Producto guardado en el catálogo.");
-    } catch (err) {}
+    apiCreateProduct(newProduct).then((created) => {
+      if (created) {
+        // replace local item with server one (image path adjusted)
+        products = products.map((p) => (p.id === created.id ? created : p));
+        saveProducts(products);
+      }
+    }).catch(() => {
+      // keep local copy if server failed
+    });
 
+    try { alert("Producto guardado en el catálogo."); } catch (e) {}
     closeModal();
     renderCatalog();
     document.getElementById("catalogo").scrollIntoView({ behavior: "smooth" });

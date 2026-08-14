@@ -226,22 +226,7 @@ function buildWhatsappLink(productName) {
 function buildProductShareUrl(product) {
   if (!product || !product.id) return "";
   const baseUrl = window.location.href.split("?")[0];
-  const productPayload = {
-    id: product.id,
-    name: product.name,
-    type: product.type,
-    month: product.month,
-    clientType: product.clientType || "personas",
-    price: product.price || "",
-    desc: product.desc || "",
-    specialDay: product.specialDay || "",
-    image: product.image || "",
-    colors: product.colors || []
-  };
-  const params = new URLSearchParams({
-    product: product.id,
-    data: btoa(unescape(encodeURIComponent(JSON.stringify(productPayload))))
-  });
+  const params = new URLSearchParams({ product: product.id });
   return `${baseUrl}?${params.toString()}`;
 }
 
@@ -437,24 +422,19 @@ function renderCatalog() {
 function openSharedProduct() {
   const params = new URLSearchParams(window.location.search);
   const id = params.get("product");
-  const encodedData = params.get("data");
+  if (!id) return;
 
-  let sharedProduct = id ? products.find((p) => p.id === id) : null;
+  let sharedProduct = products.find((p) => p.id === id);
 
-  if (!sharedProduct && encodedData) {
+  if (!sharedProduct) {
     try {
-      const decoded = JSON.parse(decodeURIComponent(escape(atob(encodedData))));
-      sharedProduct = {
-        ...decoded,
-        custom: false,
-        id: decoded.id || id || "shared-product"
-      };
-      const exists = products.some((p) => p.id === sharedProduct.id);
-      if (!exists) {
-        products = [sharedProduct, ...products];
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) {
+        const storedProducts = JSON.parse(raw);
+        sharedProduct = Array.isArray(storedProducts) ? storedProducts.find((p) => p.id === id) : null;
       }
     } catch (err) {
-      console.warn("No se pudo reconstruir el producto compartido.", err);
+      console.warn("No se pudieron cargar los productos guardados para compartir.", err);
     }
   }
 

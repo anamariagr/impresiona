@@ -125,7 +125,7 @@ const SEED_PRODUCTS = [
     clientType: "iglesias",
     price: "$45.000",
     desc: "Busos con diseño congregacional para aniversarios y retiros.",
-    image: "./img/busos-ano-bendicion-enero.jpg",
+    image: "./img/camiseta-ano-bendicion-enero.jpg",
     custom: true,
   },
   {
@@ -136,7 +136,7 @@ const SEED_PRODUCTS = [
     clientType: "personas",
     price: "$18.000",
     desc: "Mugs personalizados para Navidad y regalos de fin de año.",
-    image: "./img/mugs-ano-bendicion-enero.jpg",
+    image: "./img/vaso-primicias-enero.png",
     custom: true,
   },
   {
@@ -458,28 +458,48 @@ function initModalEvents() {
 
   productForm.addEventListener("submit", (e) => {
     e.preventDefault();
-    const type = document.getElementById("pType").value;
+    const name = document.getElementById("pName").value.trim();
+    const type = document.getElementById("pType").value || (PRODUCT_TYPES[0] && PRODUCT_TYPES[0].key);
+    const month = document.getElementById("pMonth").value || (MONTHS[0] && MONTHS[0].key);
     const colors = document.getElementById("pColors").value
       .split(",")
       .map((c) => c.trim())
       .filter(Boolean);
+
+    if (!name) {
+      alert("Por favor ingresa el nombre del producto.");
+      return;
+    }
+    if (!type || !month) {
+      alert("Selecciona el tipo de producto y el mes/evento.");
+      return;
+    }
+
     const newProduct = {
       id: "p" + Date.now(),
-      name: document.getElementById("pName").value.trim(),
+      name,
       type,
-      month: document.getElementById("pMonth").value,
+      month,
       price: document.getElementById("pPrice").value.trim(),
       desc: document.getElementById("pDesc").value.trim(),
       image: uploadedImageData,
       colors: colors.length ? colors : undefined,
       custom: true,
     };
-    const previousProducts = products;
+
+    const previousProducts = products.slice();
     products = [newProduct, ...products];
-    if (!saveProducts(products)) {
+    const saved = saveProducts(products);
+    if (!saved) {
       products = previousProducts;
       return;
     }
+
+    // Confirmación visible
+    try {
+      alert("Producto guardado en el catálogo.");
+    } catch (err) {}
+
     closeModal();
     renderCatalog();
     document.getElementById("catalogo").scrollIntoView({ behavior: "smooth" });
@@ -607,6 +627,82 @@ function initNav() {
   document.querySelectorAll(".main-nav a").forEach((a) =>
     a.addEventListener("click", () => document.getElementById("mainNav").classList.remove("open"))
   );
+}
+
+/* Render helpers for missing sections */
+function renderCategories() {
+  const grid = document.getElementById("categoryGrid");
+  if (!grid) return;
+  grid.innerHTML = CATEGORIES
+    .map((c) => `
+      <button class="category-card" data-key="${c.key}">
+        <div class="cat-icon">${renderIcon(c.icon)}</div>
+        <div class="cat-body">
+          <strong>${c.label}</strong>
+          <span class="cat-desc">${c.description}</span>
+        </div>
+      </button>
+    `)
+    .join("");
+
+  grid.querySelectorAll(".category-card").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const key = btn.dataset.key;
+      // Use the category label as a simple search filter
+      document.getElementById("filterSearch").value = key;
+      activeMonth = "todos";
+      document.getElementById("filterMonth").value = "todos";
+      renderCatalog();
+      document.getElementById("catalogo").scrollIntoView({ behavior: "smooth" });
+    });
+  });
+}
+
+function renderSpotlightCards() {
+  const grid = document.getElementById("bestSellersGrid");
+  if (!grid) return;
+  grid.innerHTML = BEST_SELLERS
+    .map((b) => `
+      <div class="spotlight-card">
+        <div class="spot-icon">${renderIcon(b.icon)}</div>
+        <div class="spot-body">
+          <strong>${b.title}</strong>
+          <span class="spot-desc">${b.desc}</span>
+        </div>
+      </div>
+    `)
+    .join("");
+}
+
+function renderGiftIdeas() {
+  const grid = document.getElementById("giftIdeasGrid");
+  if (!grid) return;
+  grid.innerHTML = GIFT_IDEAS
+    .map((g) => `
+      <div class="gift-card">
+        <div class="gift-icon">${renderIcon(g.icon)}</div>
+        <div class="gift-body">
+          <strong>${g.title}</strong>
+          <span class="gift-desc">${g.desc}</span>
+        </div>
+      </div>
+    `)
+    .join("");
+}
+
+function initHeroSearch() {
+  const btn = document.getElementById("btnHeroSearch");
+  const input = document.getElementById("heroSearch");
+  if (!btn || !input) return;
+  btn.addEventListener("click", () => {
+    const q = input.value.trim();
+    document.getElementById("filterSearch").value = q;
+    renderCatalog();
+    document.getElementById("catalogo").scrollIntoView({ behavior: "smooth" });
+  });
+  input.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") btn.click();
+  });
 }
 
 document.getElementById("year").textContent = new Date().getFullYear();

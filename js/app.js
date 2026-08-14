@@ -88,10 +88,11 @@ const GIFT_IDEAS = [
 ];
 
 const PRODUCT_TYPES = [
-  { key: "busos", label: "Busos / Sudaderas", icon: "checkroom", image: "./img/busos-ano-bendicion-enero.jpg" },
+  { key: "camisas", label: "Camisas", icon: "checkroom", image: "./img/camiseta-ano-bendicion-enero.jpg" },
+  { key: "busos", label: "Busos / Sudaderas", icon: "checkroom", image: "./img/camiseta-ano-bendicion-enero.jpg" },
   { key: "vasos", label: "Vasos", icon: "local_drink", image: "./img/vaso-primicias-enero.png" },
   { key: "calendarios", label: "Calendarios", icon: "event", image: "./img/calendario-bendicion.png" },
-  { key: "mugs", label: "Mugs / Tazas", icon: "coffee", image: "./img/mugs-ano-bendicion-enero.jpg" },
+  { key: "mugs", label: "Mugs / Tazas", icon: "coffee", image: "./img/vaso-primicias-enero.png" },
   { key: "esferos", label: "Esferos / Botilitos", icon: "edit", image: "./img/esferos.png"},
   { key: "trofeos", label: "Trofeos / Placas", icon: "emoji_events" },
   { key: "gorras", label: "Gorras", icon: "military_tech" },
@@ -222,6 +223,19 @@ function buildWhatsappLink(productName) {
   return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`;
 }
 
+function buildProductShareUrl(product) {
+  if (!product || !product.id) return "";
+  const baseUrl = window.location.href.split("?")[0];
+  const params = new URLSearchParams({ product: product.id });
+  return `${baseUrl}?${params.toString()}`;
+}
+
+function buildFacebookShareLink(product) {
+  const productUrl = buildProductShareUrl(product);
+  if (!productUrl) return "";
+  return `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(productUrl)}`;
+}
+
 function initHeaderLinks() {
   const link = buildWhatsappLink();
   document.getElementById("btnWhatsappHeader").href = link;
@@ -311,6 +325,7 @@ function productCardHTML(p) {
           <span class="product-price">${p.price || ""}</span>
           <div class="product-actions">
             <a class="btn btn-whatsapp btn-sm" title="Cotizar" href="${buildWhatsappLink(p.name)}" target="_blank" rel="noopener">Cotizar</a>
+            <button class="icon-btn" title="Compartir producto" data-share="${p.id}">${renderIcon("share")}</button>
             ${p.custom ? `<button class="icon-btn danger" title="Eliminar" data-delete="${p.id}">${renderIcon("delete")}</button>` : ""}
           </div>
         </div>
@@ -381,6 +396,39 @@ function renderCatalog() {
       }
     });
   });
+
+  container.querySelectorAll("[data-share]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const id = btn.dataset.share;
+      const product = products.find((p) => p.id === id);
+      if (!product) return;
+      const shareUrl = buildProductShareUrl(product);
+      const facebookUrl = buildFacebookShareLink(product);
+
+      if (navigator.share) {
+        navigator.share({
+          title: product.name,
+          text: `Mira este producto: ${product.name}`,
+          url: shareUrl,
+        }).catch(() => {});
+        return;
+      }
+
+      window.open(facebookUrl, "_blank", "noopener,noreferrer");
+    });
+  });
+}
+
+function openSharedProduct() {
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get("product");
+  if (!id) return;
+  const sharedProduct = products.find((p) => p.id === id);
+  if (!sharedProduct) return;
+
+  document.getElementById("filterSearch").value = sharedProduct.name;
+  renderCatalog();
+  document.getElementById("catalogo").scrollIntoView({ behavior: "smooth" });
 }
 
 /* ---------- Modal / Upload ---------- */
@@ -713,6 +761,7 @@ renderCategories();
 renderSpotlightCards();
 renderGiftIdeas();
 renderCatalog();
+openSharedProduct();
 initModalEvents();
 initFilters();
 initQuoteForm();

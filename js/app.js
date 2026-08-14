@@ -226,7 +226,22 @@ function buildWhatsappLink(productName) {
 function buildProductShareUrl(product) {
   if (!product || !product.id) return "";
   const baseUrl = window.location.href.split("?")[0];
-  const params = new URLSearchParams({ product: product.id });
+  const productPayload = {
+    id: product.id,
+    name: product.name,
+    type: product.type,
+    month: product.month,
+    clientType: product.clientType || "personas",
+    price: product.price || "",
+    desc: product.desc || "",
+    specialDay: product.specialDay || "",
+    image: product.image || "",
+    colors: product.colors || []
+  };
+  const params = new URLSearchParams({
+    product: product.id,
+    data: btoa(unescape(encodeURIComponent(JSON.stringify(productPayload))))
+  });
   return `${baseUrl}?${params.toString()}`;
 }
 
@@ -313,7 +328,7 @@ function productCardHTML(p) {
     : `<span style="display:block; height:${placeholderHeight(p)}px;">${renderIcon(t.icon)}</span>`;
   const colorsAttr = p.colors && p.colors.length ? ` data-zoom-colors='${JSON.stringify(p.colors)}'` : "";
   return `
-    <div class="product-card"${imageSrc ? ` data-zoom-image="${imageSrc}"` : ""}${colorsAttr}>
+    <div class="product-card" data-product-id="${p.id}"${imageSrc ? ` data-zoom-image="${imageSrc}"` : ""}${colorsAttr}>
       ${p.custom ? '<span class="badge-custom">Nuevo</span>' : ""}
       <div class="product-media">${media}</div>
       <div class="product-body">
@@ -422,13 +437,50 @@ function renderCatalog() {
 function openSharedProduct() {
   const params = new URLSearchParams(window.location.search);
   const id = params.get("product");
-  if (!id) return;
-  const sharedProduct = products.find((p) => p.id === id);
+  const encodedData = params.get("data");
+
+  let sharedProduct = id ? products.find((p) => p.id === id) : null;
+
+  if (!sharedProduct && encodedData) {
+    try {
+      const decoded = JSON.parse(decodeURIComponent(escape(atob(encodedData))));
+      sharedProduct = {
+        ...decoded,
+        custom: false,
+        id: decoded.id || id || "shared-product"
+      };
+      const exists = products.some((p) => p.id === sharedProduct.id);
+      if (!exists) {
+        products = [sharedProduct, ...products];
+      }
+    } catch (err) {
+      console.warn("No se pudo reconstruir el producto compartido.", err);
+    }
+  }
+
   if (!sharedProduct) return;
 
+  document.getElementById("filterMonth").value = "todos";
+  document.getElementById("filterType").value = "todos";
+  document.getElementById("filterClient").value = "todos";
   document.getElementById("filterSearch").value = sharedProduct.name;
+  activeMonth = "todos";
+  renderCalendar();
   renderCatalog();
-  document.getElementById("catalogo").scrollIntoView({ behavior: "smooth" });
+
+  setTimeout(() => {
+    const productCard = document.querySelector(`[data-product-id="${sharedProduct.id}"]`);
+    if (productCard) {
+      productCard.scrollIntoView({ behavior: "smooth", block: "center" });
+      productCard.style.outline = "3px solid rgba(41,196,234,.8)";
+      productCard.style.outlineOffset = "4px";
+      setTimeout(() => {
+        productCard.style.outline = "";
+        productCard.style.outlineOffset = "";
+      }, 2200);
+    }
+    document.getElementById("catalogo").scrollIntoView({ behavior: "smooth" });
+  }, 120);
 }
 
 /* ---------- Modal / Upload ---------- */

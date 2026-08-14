@@ -236,7 +236,6 @@ function renderCalendar() {
   grid.innerHTML = MONTHS.map((m) => `
     <button class="calendar-card ${activeMonth === m.key ? "active" : ""}" data-month="${m.key}">
       <div class="cal-month">${renderIcon(m.icon, "cal-icon")} ${m.label}</div>
-      <div class="cal-events">${m.eventos}</div>
     </button>
   `).join("");
   grid.querySelectorAll(".calendar-card").forEach((card) => {
@@ -266,8 +265,8 @@ function populateSelects() {
 
   MONTHS.forEach((m) => {
     filterMonth.insertAdjacentHTML("beforeend", `<option value="${m.key}">${renderIcon(m.icon)} ${m.label}</option>`);
-    pMonth.insertAdjacentHTML("beforeend", `<option value="${m.key}">${renderIcon(m.icon)} ${m.label} — ${m.eventos}</option>`);
-    qMonth.insertAdjacentHTML("beforeend", `<option value="${m.key}">${renderIcon(m.icon)} ${m.label} — ${m.eventos}</option>`);
+    pMonth.insertAdjacentHTML("beforeend", `<option value="${m.key}">${renderIcon(m.icon)} ${m.label}</option>`);
+    qMonth.insertAdjacentHTML("beforeend", `<option value="${m.key}">${renderIcon(m.icon)} ${m.label}</option>`);
   });
   PRODUCT_TYPES.forEach((t) => {
     filterType.insertAdjacentHTML("beforeend", `<option value="${t.key}">${t.label}</option>`);
@@ -307,6 +306,7 @@ function productCardHTML(p) {
         <span class="product-tag">${renderIcon(t.icon)} ${t.label}</span>
         <span class="product-name">${p.name}</span>
         ${p.desc ? `<span class="product-desc">${p.desc}</span>` : ""}
+        ${p.specialDay ? `<span class="product-special">Día especial: ${p.specialDay}</span>` : ""}
         <div class="product-footer">
           <span class="product-price">${p.price || ""}</span>
           <div class="product-actions">
@@ -358,7 +358,6 @@ function renderCatalog() {
         <div class="month-group">
           <div class="month-group-header">
             <h3>${renderIcon(m.icon)} ${m.label}</h3>
-            <span>${m.eventos}</span>
           </div>
           <div class="product-grid">${items.map(productCardHTML).join("")}</div>
         </div>
@@ -480,6 +479,7 @@ function initModalEvents() {
       name,
       type,
       month,
+      specialDay: document.getElementById("pSpecialDay")?.value.trim() || undefined,
       price: document.getElementById("pPrice").value.trim(),
       desc: document.getElementById("pDesc").value.trim(),
       image: uploadedImageData,

@@ -177,9 +177,14 @@ const SEED_PRODUCTS = [
 
 const STORAGE_KEY = "detodo_productos";
 
+// Determine API base: if frontend is not on port 5000, assume API at port 5000 on same host.
+const API_BASE = (window.location.port && window.location.port !== '5000')
+  ? `${window.location.protocol}//${window.location.hostname}:5000`
+  : '';
+
 async function apiGetProducts() {
   try {
-    const res = await fetch('/api/products');
+    const res = await fetch(`${API_BASE}/api/products`);
     if (!res.ok) throw new Error('no api');
     const data = await res.json();
     return Array.isArray(data) ? data : [];
@@ -190,7 +195,7 @@ async function apiGetProducts() {
 
 async function apiCreateProduct(product) {
   try {
-    const res = await fetch('/api/products', {
+    const res = await fetch(`${API_BASE}/api/products`, {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(product),
     });
@@ -203,7 +208,7 @@ async function apiCreateProduct(product) {
 
 async function apiDeleteProduct(id) {
   try {
-    const res = await fetch(`/api/products/${id}`, { method: 'DELETE' });
+    const res = await fetch(`${API_BASE}/api/products/${id}`, { method: 'DELETE' });
     return res.ok;
   } catch (err) {
     return false;

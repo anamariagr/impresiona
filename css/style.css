@@ -89,7 +89,9 @@ a { text-decoration: none; color: inherit; }
 .main-nav { display: flex; gap: 26px; margin-left: 12px; flex: 1; }
 .main-nav a { font-weight: 500; color: var(--text-muted); }
 .main-nav a:hover { color: var(--primary); }
-nav.flex-1.p-2.overflow-y-auto {
+nav.flex-1.p-2.overflow-y-auto,
+.modal,
+.image-zoom-popup {
   overflow-y: scroll;
   scrollbar-color: #00007700 #bada5500;
 }

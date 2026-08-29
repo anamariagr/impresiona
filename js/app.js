@@ -550,8 +550,18 @@ function renderIcon(name, additionalClass = "") {
   return `<span class="${iconClass}">${name}</span>`;
 }
 
-function buildWhatsappLink(productName) {
+function buildWhatsappLink(productOrName) {
   const base = "Hola, quiero cotizar";
+
+  if (productOrName && typeof productOrName === "object") {
+    const productUrl = buildProductShareUrl(productOrName);
+    const text = productUrl
+      ? `${base} el producto "${productOrName.name}" de deTodo. ${productUrl}`
+      : `${base} el producto "${productOrName.name}" de deTodo.`;
+    return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`;
+  }
+
+  const productName = typeof productOrName === "string" ? productOrName : "";
   const text = productName ? `${base} el producto "${productName}" de deTodo.` : `${base} recuerdos personalizados de deTodo.`;
   return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`;
 }
@@ -560,7 +570,7 @@ function buildProductShareUrl(product) {
   if (!product || !product.id) return "";
   const baseUrl = window.location.href.split("?")[0];
   const params = new URLSearchParams({ product: product.id });
-  return `${baseUrl}?${params.toString()}`;
+  return `${baseUrl}?${params.toString()}#product-${product.id}`;
 }
 
 function buildFacebookShareLink(product) {
@@ -667,7 +677,7 @@ function productCardHTML(p) {
     : `<span style="display:block; height:${placeholderHeight(p)}px;">${renderIcon(t.icon)}</span>`;
   const colorsAttr = p.colors && p.colors.length ? ` data-zoom-colors='${JSON.stringify(p.colors)}'` : "";
   return `
-    <div class="product-card" data-product-id="${p.id}"${imageSrc ? ` data-zoom-image="${imageSrc}"` : ""}${colorsAttr}>
+    <div class="product-card" id="product-${p.id}" data-product-id="${p.id}"${imageSrc ? ` data-zoom-image="${imageSrc}"` : ""}${colorsAttr}>
       ${p.custom ? '<span class="badge-custom">Nuevo</span>' : ""}
       <div class="product-media">${media}</div>
       <div class="product-body">
@@ -678,7 +688,7 @@ function productCardHTML(p) {
         <div class="product-footer">
           <span class="product-price">${p.price || ""}</span>
           <div class="product-actions">
-            <a class="btn btn-whatsapp btn-sm" title="Cotizar" href="${buildWhatsappLink(p.name)}" target="_blank" rel="noopener">Cotizar</a>
+            <a class="btn btn-whatsapp btn-sm" title="Cotizar" href="${buildWhatsappLink(p)}" target="_blank" rel="noopener">Cotizar</a>
             <button class="icon-btn" title="Compartir producto" data-share="${p.id}">${renderIcon("share")}</button>
           </div>
         </div>
@@ -688,20 +698,10 @@ function productCardHTML(p) {
 }
 
 function renderCatalog() {
-  const monthFilter = document.getElementById("filterMonth").value;
-  const typeFilter = document.getElementById("filterType").value;
-  const clientFilter = document.getElementById("filterClient").value;
-  const search = document.getElementById("filterSearch").value.trim().toLowerCase();
+  const typeFilter = document.getElementById("filterType")?.value || "todos";
 
   const filtered = products.filter((p) => {
-    if (monthFilter !== "todos" && p.month !== monthFilter) return false;
     if (typeFilter !== "todos" && p.type !== typeFilter) return false;
-    if (clientFilter !== "todos" && p.clientType !== clientFilter) return false;
-    if (search) {
-      const clientLabel = CLIENT_TYPES.find((c) => c.key === p.clientType)?.label || "";
-      const hay = `${p.name} ${p.desc || ""} ${typeInfo(p.type).label} ${clientLabel} ${p.month}`.toLowerCase();
-      if (!hay.includes(search)) return false;
-    }
     return true;
   });
 
@@ -814,10 +814,8 @@ function openSharedProduct() {
 
   if (!sharedProduct) return;
 
-  document.getElementById("filterMonth").value = "todos";
-  document.getElementById("filterType").value = "todos";
-  document.getElementById("filterClient").value = "todos";
-  document.getElementById("filterSearch").value = sharedProduct.name;
+  const filterType = document.getElementById("filterType");
+  if (filterType) filterType.value = "todos";
   activeMonth = "todos";
   renderCalendar();
   renderCatalog();
@@ -965,23 +963,21 @@ function initModalEvents() {
 }
 
 function initFilters() {
-  document.getElementById("filterMonth").addEventListener("change", (e) => {
-    activeMonth = e.target.value;
-    renderCalendar();
-    renderCatalog();
-  });
-  document.getElementById("filterType").addEventListener("change", renderCatalog);
-  document.getElementById("filterClient").addEventListener("change", renderCatalog);
-  document.getElementById("filterSearch").addEventListener("input", renderCatalog);
-  document.getElementById("btnClearFilters").addEventListener("click", () => {
-    document.getElementById("filterMonth").value = "todos";
-    document.getElementById("filterType").value = "todos";
-    document.getElementById("filterClient").value = "todos";
-    document.getElementById("filterSearch").value = "";
-    activeMonth = "todos";
-    renderCalendar();
-    renderCatalog();
-  });
+  const filterType = document.getElementById("filterType");
+  const btnClearFilters = document.getElementById("btnClearFilters");
+
+  if (filterType) {
+    filterType.addEventListener("change", renderCatalog);
+  }
+
+  if (btnClearFilters) {
+    btnClearFilters.addEventListener("click", () => {
+      if (filterType) filterType.value = "todos";
+      activeMonth = "todos";
+      renderCalendar();
+      renderCatalog();
+    });
+  }
 }
 
 function initQuoteForm() {

@@ -8,6 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,400,0,0" rel="stylesheet">
+<link rel="icon" type="image/png" href="img/logochill.png">
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -16,10 +17,10 @@
 <header class="site-header">
   <div class="container header-inner">
     <a href="#inicio" class="logo">
-      <span class="logo-text"><strong>IMPRESIONA</strong></span>
+      <img src="img/logochill.png" alt="deTodo" class="logo-img">
     </a>
     <nav class="main-nav" id="mainNav">
-      <a href="#catalogo">Catálogo</a>
+      <a href="#catalogo">Productos</a>
       <a href="#cotizar">Cotizar</a>
       <a href="#contacto">Contacto</a>
     </nav>
@@ -34,31 +35,52 @@
 </header>
 
 <!-- HERO -->
-<section class="hero" id="inicio">
+<section class="hero hero-landing" id="inicio">
+  <div class="hero-cloud hero-cloud-left"></div>
+  <div class="hero-cloud hero-cloud-right"></div>
   <div class="container hero-inner">
-    <div class="hero-text">
-      <span class="eyebrow">Personaliza momentos especiales</span>
-      <h1>Convierte cada evento en un recuerdo único.</h1>
-      <p>Desde bodas y cumpleaños, dias especiales, dia de la familia: descubre ideas inspiradoras para cada temporada del año.</p>
-      <div class="hero-cta">
-        <a href="#calendario" class="btn btn-primary btn-lg">Ver eventos del año</a>
-        <a href="#catalogo" class="btn btn-outline btn-lg">Ver catálogo</a>
-      </div>
-      <div class="hero-search">
-        <label for="heroSearch">¿Qué evento estás celebrando?</label>
-        <div class="search-input">
-          <input type="search" id="heroSearch" placeholder="Ej: cumpleaños, día del padre, Navidad...">
-          <button type="button" class="btn btn-primary" id="btnHeroSearch">Buscar</button>
-        </div>
-      </div>
+    <div class="hero-copy">
+      <div class="hero-wordline hero-wordline-top">IMAGINA</div>
+      <div class="hero-wordline hero-wordline-mid">QUE</div>
+      <div class="hero-wordline hero-wordline-bottom">PUEDES</div>
+      <div class="hero-wordline hero-wordline-accent">CREAR</div>
     </div>
+
     <div class="hero-visual" aria-hidden="true">
-      <div class="hero-card card-1"><img class="camisa" src="./img/camisa.png"></div>
-      <div class="hero-card card-2"><img class="vaso" src="./img/vaso.png"></div>
-      <div class="hero-card card-3"><img class="vaso" src="./img/termologo.png"></div>
-      <div class="hero-card card-4"><img class="vaso" src="./img/gorra.png"></div>
-      <div class="hero-card card-5"><img class="vaso" src="./img/libreta.png"></div>
+      <div class="hero-card card-main"><img src="./img/camisa.png" alt="Camisa" /></div>
+      <div class="hero-card card-left"><img src="./img/vaso.png" alt="Vaso" /></div>
+      <div class="hero-card card-right"><img src="./img/libreta.png" alt="Libreta" /></div>
+      <div class="hero-card card-small"><img src="./img/termologo.png" alt="Termo" /></div>
     </div>
+  </div>
+
+  <div class="container hero-search-wrap">
+    <div class="hero-search">
+      <label for="heroSearch">¿Qué evento estás celebrando?</label>
+      <div class="search-input">
+        <input type="search" id="heroSearch" placeholder="Ej: cumpleaños, día del padre, Navidad...">
+        <button type="button" class="btn btn-primary" id="btnHeroSearch">Buscar</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="editorial-strip">
+  <div class="container editorial-grid">
+    <article class="mini-cover cover-left">
+      <div class="cover-visual">
+        <img src="./img/vaso.png" alt="Vaso personalizado" />
+      </div>
+      <h3>Un navío para artistas</h3>
+      <p>Diseños que convierten cada detalle en una pieza memorable.</p>
+    </article>
+    <article class="mini-cover cover-right">
+      <div class="cover-visual">
+        <img src="./img/libreta.png" alt="Libreta personalizada" />
+      </div>
+      <h3>Acompañe nuestro nuevo lanzamiento</h3>
+      <p>Personalizamos para iglesias, marcas, colegios y eventos.</p>
+    </article>
   </div>
 </section>
 
@@ -81,9 +103,9 @@
 
     <div class="filters-bar">
       <div class="filter-group">
-        <label for="filterMonth">Mes / Evento</label>
+        <label for="filterMonth">Categoría</label>
         <select id="filterMonth">
-          <option value="todos">Todos los meses</option>
+          <option value="todos">Todos los productos</option>
         </select>
       </div>
       <div class="filter-group">
@@ -214,7 +236,7 @@
       <a class="contact-card" href="mailto:detodo@gmail.com">
         <span class="contact-icon material-symbols-outlined">email</span>
         <strong>Correo</strong>
-        <span>detodo@gmail.com</span>
+        <span>infoconimpulso@gmail.com</span>
       </a>
       <div class="contact-card">
         <span class="contact-icon material-symbols-outlined">location_on</span>

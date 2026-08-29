@@ -89,37 +89,27 @@ const GIFT_IDEAS = [
 
 const PRODUCT_TYPES = [
   { key: "camisas", label: "Camisas", icon: "checkroom", image: "./img/camiseta-ano-bendicion-enero.jpg" },
-  { key: "busos", label: "Busos / Sudaderas", icon: "checkroom", image: "./img/camiseta-ano-bendicion-enero.jpg" },
+  //{ key: "busos", label: "Busos / Sudaderas", icon: "checkroom", image: "./img/camiseta-ano-bendicion-enero.jpg" },
   { key: "vasos", label: "Vasos", icon: "local_drink", image: "./img/vaso-primicias-enero.png" },
-  { key: "calendarios", label: "Calendarios", icon: "event", image: "./img/calendario-bendicion.png" },
-  { key: "mugs", label: "Mugs / Tazas", icon: "coffee", image: "./img/vaso-primicias-enero.png" },
-  { key: "esferos", label: "Esferos / Botilitos", icon: "edit", image: "./img/esferos.png"},
-  { key: "trofeos", label: "Trofeos / Placas", icon: "emoji_events" },
-  { key: "gorras", label: "Gorras", icon: "military_tech" },
+ // { key: "calendarios", label: "Calendarios", icon: "event", image: "./img/calendario-bendicion.png" },
+ // { key: "esferos", label: "Esferos / Botilitos", icon: "edit", image: "./img/esferos.png"},
+  //{ key: "trofeos", label: "Trofeos / Placas", icon: "emoji_events" },
+ { key: "bolsos", label: "Bolsos / Totebags", icon: "shopping_bag" },
   { key: "llaveros", label: "Llaveros", icon: "key" },
+  { key: "monederos", label: "Monederos", icon: "wallet" },
   { key: "agendas", label: "Agendas / Cuadernos", icon: "menu_book" },
-  { key: "termos", label: "Termos / Botilitos", icon: "thermostat", image: "./img/termo.png"},
+  //{ key: "termos", label: "Termos / Botilitos", icon: "thermostat", image: "./img/termologo.png"},
   { key: "manillas", label: "Manillas", icon: "watch" },
-  { key: "bolsos", label: "Bolsos / Totebags", icon: "shopping_bag" },
   { key: "pendones", label: "Pendones / Banners", icon: "campaign" },
   { key: "stickers", label: "Stickers", icon: "sticky_note_2" },
+  { key: "gorras", label: "Gorras", icon: "military_tech" },
   { key: "otros", label: "Otros recuerdos", icon: "category" },
 ];
 
 const SEED_PRODUCTS = [
+ 
   {
     id: "p1",
-    name: "Vaso corporativo",
-    type: "vasos",
-    month: "noviembre",
-    clientType: "empresas",
-    price: "$12.000",
-    desc: "Vasos personalizados para eventos empresariales y campañas.",
-    image: "./img/vaso-primicias-enero.png",
-    custom: true,
-  },
-  {
-    id: "p2",
     name: "Buso aniversario",
     type: "busos",
     month: "julio",
@@ -130,14 +120,25 @@ const SEED_PRODUCTS = [
     custom: true,
   },
   {
-    id: "p3",
-    name: "Taza de regalo",
+    id: "p2",
+    name: "Taza ghibli de regalo",
     type: "mugs",
     month: "diciembre",
     clientType: "personas",
     price: "$18.000",
     desc: "Mugs personalizados para Navidad y regalos de fin de año.",
-    image: "./img/vaso-primicias-enero.png",
+    image: "./img/vasogibli2.png",
+    custom: true,
+  },
+  {
+    id: "p3",
+    name: "Taza ghibli de regalo",
+    type: "mugs",
+    month: "diciembre",
+    clientType: "personas",
+    price: "$18.000",
+    desc: "Mugs personalizados para Navidad y regalos de fin de año.",
+    image: "./img/vasogibli2.png",
     custom: true,
   },
   {
@@ -145,10 +146,10 @@ const SEED_PRODUCTS = [
     name: "Termo Futttura 2026",
     type: "termos",
     month: "septiembre",
-    clientType: "persona",
+    clientType: "personas",
     price: "$24.000",
     desc: "Termos para fans Futtura.",
-    image: "./img/termo.png",
+    image: "./img/termologo.png",
     custom: true,
   },
   {
@@ -165,14 +166,318 @@ const SEED_PRODUCTS = [
   {
     id: "p6",
     name: "Camisa Futttura 2026",
-    type: "camisa",
+    type: "camisas",
     month: "septiembre",
     clientType: "personas",
     price: "$69.000",
     desc: "Camisa personalizada para Fans FUTTTURA 2026.",
-    image: "./img/futttura.jpg",
+    image: "./img/futttura-2026.jpg",
     custom: true,
   },
+  {
+    id: "p7",
+    name: "Calendario de bendición",
+    type: "calendarios",
+    month: "enero",
+    clientType: "iglesias",
+    price: "$12.000",
+    desc: "Calendario personalizado para acompañar el año de tu iglesia.",
+    image: "./img/calendario-bendicion.png",
+    custom: true,
+  },
+  {
+    id: "p8",
+    name: "Camisa corporativa",
+    type: "camisas",
+    month: "noviembre",
+    clientType: "empresas",
+    price: "$35.000",
+    desc: "Camisa personalizada para uniformes y campañas empresariales.",
+    image: "./img/camisa-3.png",
+    custom: true,
+  },
+  
+  {
+    id: "p8b",
+    name: "Camisa para equipo",
+    type: "camisas",
+    month: "noviembre",
+    clientType: "empresas",
+    price: "$36.000",
+    desc: "Camisa personalizada para eventos, equipos y campañas corporativas.",
+    image: "./img/camisa-2.png",
+    custom: true,
+  },
+  
+  {
+    id: "p8a",
+    name: "Camisa de ministerio",
+    type: "camisas",
+    month: "septiembre",
+    clientType: "iglesias",
+    price: "$38.000",
+    desc: "Camisa para equipos de ministerio con diseño sobrio y personalizado.",
+    image: "./img/camisa-1.png",
+    custom: true,
+  },
+  {
+    id: "p8d",
+    name: "Camisa personalizada clásica",
+    type: "camisas",
+    month: "julio",
+    clientType: "personas",
+    price: "$40.000",
+    desc: "Camisa clásica con diseño personalizado para eventos y regalos especiales.",
+    image: "./img/camisa.png",
+    custom: true,
+  },
+  {
+    id: "p9",
+    name: "Gorra bordada",
+    type: "gorras",
+    month: "julio",
+    clientType: "personas",
+    price: "$28.000",
+    desc: "Gorra personalizada con bordado de logo o nombre.",
+    image: "./img/gorra.png",
+    custom: true,
+  },
+  
+  {
+    id: "p10",
+    name: "Libreta personalizada",
+    type: "agendas",
+    month: "septiembre",
+    clientType: "instituciones",
+    price: "$18.000",
+    desc: "Libreta ideal para regreso a clases y eventos institucionales.",
+    image: "./img/libreta.jpg",
+    custom: true,
+  },
+  {
+    id: "p11",
+    name: "Camiseta Morat",
+    type: "camisas",
+    month: "octubre",
+    clientType: "personas",
+    price: "$55.000",
+    desc: "Camiseta para fans de Morat.",
+    image: "./img/morat.jpg",
+    custom: true,
+  },
+  {
+    id: "p12",
+    name: "Termo con logo",
+    type: "termos",
+    month: "junio",
+    clientType: "empresas",
+    price: "$32.000",
+    desc: "Termo personalizado con logo para regalos corporativos.",
+    image: "./img/termologo.png",
+    custom: true,
+  },
+  {
+    id: "p13",
+    name: "Camiseta Trapkolombia",
+    type: "camisas",
+    month: "agosto",
+    clientType: "personas",
+    price: "$55.000",
+    desc: "Camiseta para fans de Trapkolombia.",
+    image: "./img/trapkolombia.jpg",
+    custom: true,
+  },
+ {
+    id: "p18",
+    name: "Vaso gatuno",
+    type: "vasos",
+    month: "cumpleaños",
+    clientType: "personas",
+    price: "$15.000",
+    desc: "Vaso de prueba agregado desde el panel.",
+    image: "./img/vasogato.png",
+    custom: true,
+  },
+  {
+    id: "p15",
+    name: "Vaso Gibli",
+    type: "vasos",
+    month: "cumpleaños",
+    clientType: "personas",
+    price: "$15.000",
+    desc: "Vaso Gibli, ideal para regalar en cualquier ocasión.",
+    image: "./img/vasogibli.png",
+    custom: true,
+  },
+  {
+    id: "p16",
+    name: "Vaso Gibli edición 2",
+    type: "vasos",
+    month: "cumpleaños",
+    clientType: "personas",
+    price: "$18.000",
+    desc: "Segunda edición del vaso Gibli.",
+    image: "./img/vasogibli2.png",
+    custom: true,
+  },
+  {
+    id: "p17",
+    name: "Vaso Per",
+    type: "vasos",
+    month: "cumpleaños",
+    clientType: "personas",
+    price: "$16.000",
+    desc: "Vaso personalizado edición Per.",
+    image: "./img/vasoper.png",
+    custom: true,
+  },
+  
+   
+  {
+    id: "p18",
+    name: "Vaso personalizado",
+    type: "vasos",
+    month: "cumpleaños",
+    clientType: "personas",
+    price: "$15.000",
+    desc: "Vaso personalizado para cumpleaños y celebraciones.",
+    image: "./img/vaso.png",
+    custom: true,
+  },
+  {
+    id: "p19",
+    name: "Tote bag personalizada",
+    type: "bolsos",
+    month: "julio",
+    clientType: "personas",
+    price: "$25.000",
+    desc: "Tote bag personalizada para regalos, promociones y eventos.",
+    image: "./img/tote.perso.jpg",
+    custom: true,
+  },
+ 
+  {
+    id: "p20",
+    name: "Totebag Chill",
+    type: "bolsos",
+    month: "julio",
+    clientType: "personas",
+    price: "$25.000",
+    desc: "Totebag moderna con diseño atractivo para regalos y merchandising.",
+    image: "./img/totebag-chill.jpg",
+    custom: true,
+  },
+  {
+    id: "p21",
+    name: "Totebag Chuki",
+    type: "bolsos",
+    month: "julio",
+    clientType: "personas",
+    price: "$26.000",
+    desc: "Totebag con estilo juvenil y diseño exclusivo para eventos.",
+    image: "./img/totebag-chuki.jpg",
+    custom: true,
+  },
+  {
+    id: "p22",
+    name: "Totebag DePreda",
+    type: "bolsos",
+    month: "julio",
+    clientType: "personas",
+    price: "$27.000",
+    desc: "Totebag para colecciones especiales y regalos personalizados.",
+    image: "./img/totebag-depreda.jpg",
+    custom: true,
+  },
+  {
+    id: "p23",
+    name: "Totebag Dracula",
+    type: "bolsos",
+    month: "julio",
+    clientType: "personas",
+    price: "$28.000",
+    desc: "Totebag con estilo temático para eventos y colecciones únicas.",
+    image: "./img/totebag-dracula.jpg",
+    custom: true,
+  },
+  {
+    id: "p24",
+    name: "Totebag Gremlin",
+    type: "bolsos",
+    month: "julio",
+    clientType: "personas",
+    price: "$29.000",
+    desc: "Totebag divertida y llamativa para regalos y promociones creativas.",
+    image: "./img/totebag-gremlin.jpg",
+    custom: true,
+  },
+  {
+    id: "p25",
+    name: "Totebag Perro",
+    type: "bolsos",
+    month: "julio",
+    clientType: "personas",
+    price: "$24.000",
+    desc: "Totebag con diseño original para detalles personalizados y regalos.",
+    image: "./img/tote-perro.jpg",
+    custom: true,
+  },
+  {
+    id: "p26",
+    name: "Monedero personalizado",
+    type: "monederos",
+    month: "julio",
+    clientType: "personas",
+    price: "$7.500",
+    desc: "Monedero con diseño personalizado para detalle y regalo.",
+    image: "./img/moderero-vang.jpg",
+    custom: true,
+  },
+  {
+    id: "p27",
+    name: "Llavero personalizado",
+    type: "llaveros",
+    month: "julio",
+    clientType: "personas",
+    price: "$5.000",
+    desc: "Llavero con nombre o logo para recuerdos y promociones.",
+    image: "./img/llavero1.jpg",
+    custom: true,
+  },
+  {
+    id: "p28",
+    name: "Llavero de cuero",
+    type: "llaveros",
+    month: "julio",
+    clientType: "personas",
+    price: "$6.000",
+    desc: "Llavero premium para regalos y recuerdos personalizados.",
+    image: "./img/llavero-2.jpg",
+    custom: true,
+  },
+  {
+    id: "p29",
+    name: "Llavero mini",
+    type: "llaveros",
+    month: "julio",
+    clientType: "personas",
+    price: "$5.500",
+    desc: "Llavero compacto con diseño moderno y personalizado.",
+    image: "./img/llavero-3.jpg",
+    custom: true,
+  },
+  {
+    id: "p30",
+    name: "Llavero premium",
+    type: "llaveros",
+    month: "julio",
+    clientType: "personas",
+    price: "$7.000",
+    desc: "Llavero elegante con acabado premium para promociones y detalles.",
+    image: "./img/llavero-4.jpg",
+    custom: true,
+  },
+  
 ];
 
 const STORAGE_KEY = "detodo_productos";
@@ -215,22 +520,11 @@ async function apiDeleteProduct(id) {
   }
 }
 
+let products = [];
+
 function loadProducts() {
-  // Try server first (async), but return cached seed immediately to render while fetching
-  const cached = localStorage.getItem(STORAGE_KEY);
-  if (cached) {
-    try { products = JSON.parse(cached); } catch (e) { products = [...SEED_PRODUCTS]; }
-  } else {
-    products = [...SEED_PRODUCTS];
-  }
-  // Fetch server products and replace if available
-  apiGetProducts().then((srv) => {
-    if (Array.isArray(srv)) {
-      products = srv;
-      try { localStorage.setItem(STORAGE_KEY, JSON.stringify(products)); } catch(e){}
-      renderCatalog();
-    }
-  });
+  // Catalog is managed from code only; ignore localStorage and server
+  products = [...SEED_PRODUCTS];
   return products;
 }
 
@@ -240,7 +534,7 @@ function saveProducts(products) {
   return true;
 }
 
-let products = loadProducts();
+products = loadProducts();
 let activeMonth = "todos";
 let uploadedImageData = null;
 
@@ -275,6 +569,13 @@ function buildFacebookShareLink(product) {
   return `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(productUrl)}`;
 }
 
+function buildWhatsappShareLink(product) {
+  const productUrl = buildProductShareUrl(product);
+  if (!productUrl) return "";
+  const text = `Mira este producto: ${product.name} ${productUrl}`;
+  return `https://wa.me/?text=${encodeURIComponent(text)}`;
+}
+
 function initHeaderLinks() {
   const link = buildWhatsappLink();
   document.getElementById("btnWhatsappHeader").href = link;
@@ -286,6 +587,7 @@ function initHeaderLinks() {
 
 function renderCalendar() {
   const grid = document.getElementById("calendarGrid");
+  if (!grid) return;
   grid.innerHTML = MONTHS.map((m) => `
     <button class="calendar-card ${activeMonth === m.key ? "active" : ""}" data-month="${m.key}">
       <div class="cal-month">${renderIcon(m.icon, "cal-icon")} ${m.label}</div>
@@ -316,24 +618,37 @@ function populateSelects() {
   const qMonth = document.getElementById("qMonth");
   const qProductsGrid = document.getElementById("qProductsGrid");
 
+  if (filterMonth) {
+    filterMonth.innerHTML = '<option value="todos">Todos los productos</option>';
+    MONTHS.forEach((m) => {
+      filterMonth.insertAdjacentHTML("beforeend", `<option value="${m.key}">${m.label}</option>`);
+    });
+  }
+
+  if (filterType) {
+    filterType.innerHTML = '<option value="todos">Todos los tipos</option>';
+    PRODUCT_TYPES.forEach((t) => {
+      filterType.insertAdjacentHTML("beforeend", `<option value="${t.key}">${t.label}</option>`);
+    });
+  }
+
   MONTHS.forEach((m) => {
-    filterMonth.insertAdjacentHTML("beforeend", `<option value="${m.key}">${renderIcon(m.icon)} ${m.label}</option>`);
-    pMonth.insertAdjacentHTML("beforeend", `<option value="${m.key}">${renderIcon(m.icon)} ${m.label}</option>`);
-    qMonth.insertAdjacentHTML("beforeend", `<option value="${m.key}">${renderIcon(m.icon)} ${m.label}</option>`);
+    const opt = `<option value="${m.key}">${renderIcon(m.icon)} ${m.label}</option>`;
+    if (pMonth) pMonth.insertAdjacentHTML("beforeend", opt);
+    if (qMonth) qMonth.insertAdjacentHTML("beforeend", opt);
   });
   PRODUCT_TYPES.forEach((t) => {
-    filterType.insertAdjacentHTML("beforeend", `<option value="${t.key}">${t.label}</option>`);
-    pType.insertAdjacentHTML("beforeend", `<option value="${t.key}">${t.label}</option>`);
-    pIcon.insertAdjacentHTML("beforeend", `<option value="${t.icon}">${t.label}</option>`);
-    qProductsGrid.insertAdjacentHTML("beforeend", `
+    if (pType) pType.insertAdjacentHTML("beforeend", `<option value="${t.key}">${t.label}</option>`);
+    if (pIcon) pIcon.insertAdjacentHTML("beforeend", `<option value="${t.icon}">${t.label}</option>`);
+    if (qProductsGrid) qProductsGrid.insertAdjacentHTML("beforeend", `
       <label class="checkbox-option">
         <input type="checkbox" name="qProduct" value="${t.label}"> ${renderIcon(t.icon)} ${t.label}
       </label>
     `);
   });
   CLIENT_TYPES.forEach((c) => {
-    filterClient.insertAdjacentHTML("beforeend", `<option value="${c.key}">${c.label}</option>`);
-    pClientType.insertAdjacentHTML("beforeend", `<option value="${c.key}">${c.label}</option>`);
+    if (filterClient) filterClient.insertAdjacentHTML("beforeend", `<option value="${c.key}">${c.label}</option>`);
+    if (pClientType) pClientType.insertAdjacentHTML("beforeend", `<option value="${c.key}">${c.label}</option>`);
   });
 }
 
@@ -365,7 +680,6 @@ function productCardHTML(p) {
           <div class="product-actions">
             <a class="btn btn-whatsapp btn-sm" title="Cotizar" href="${buildWhatsappLink(p.name)}" target="_blank" rel="noopener">Cotizar</a>
             <button class="icon-btn" title="Compartir producto" data-share="${p.id}">${renderIcon("share")}</button>
-            ${p.custom ? `<button class="icon-btn danger" title="Eliminar" data-delete="${p.id}">${renderIcon("delete")}</button>` : ""}
           </div>
         </div>
       </div>
@@ -401,17 +715,19 @@ function renderCatalog() {
   }
   empty.classList.add("hidden");
 
-  const monthsToShow = monthFilter !== "todos" ? [monthFilter] : MONTHS.map((m) => m.key);
+  const categoriesToShow = typeFilter !== "todos"
+    ? [typeFilter]
+    : PRODUCT_TYPES.map((t) => t.key).filter((key) => filtered.some((p) => p.type === key));
 
-  container.innerHTML = monthsToShow
-    .map((mk) => {
-      const items = filtered.filter((p) => p.month === mk);
+  container.innerHTML = categoriesToShow
+    .map((key) => {
+      const items = filtered.filter((p) => p.type === key);
       if (!items.length) return "";
-      const m = monthInfo(mk);
+      const info = typeInfo(key);
       return `
         <div class="month-group">
           <div class="month-group-header">
-            <h3>${renderIcon(m.icon)} ${m.label}</h3>
+            <h3>${renderIcon(info.icon)} ${info.label}</h3>
           </div>
           <div class="product-grid">${items.map(productCardHTML).join("")}</div>
         </div>
@@ -425,27 +741,16 @@ function renderCatalog() {
     }, { once: true });
   });
 
-  container.querySelectorAll("[data-delete]").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const id = btn.dataset.delete;
-      if (confirm("¿Eliminar este producto del catálogo?")) {
-        // Try delete on server, fallback to local
-        apiDeleteProduct(id).then((ok) => {
-          products = products.filter((p) => p.id !== id);
-          saveProducts(products);
-          renderCatalog();
-        });
-      }
-    });
-  });
-
   container.querySelectorAll("[data-share]").forEach((btn) => {
-    btn.addEventListener("click", () => {
+    btn.addEventListener("click", (event) => {
+      event.preventDefault();
       const id = btn.dataset.share;
       const product = products.find((p) => p.id === id);
       if (!product) return;
+
       const shareUrl = buildProductShareUrl(product);
       const facebookUrl = buildFacebookShareLink(product);
+      const whatsappUrl = buildWhatsappShareLink(product);
 
       if (navigator.share) {
         navigator.share({
@@ -456,7 +761,34 @@ function renderCatalog() {
         return;
       }
 
-      window.open(facebookUrl, "_blank", "noopener,noreferrer");
+      const chooser = window.open("", "_blank", "width=360,height=220");
+      if (!chooser) {
+        window.open(facebookUrl, "_blank", "noopener,noreferrer");
+        return;
+      }
+
+      chooser.document.write(`
+        <html>
+          <head>
+            <title>Compartir producto</title>
+            <style>
+              body { font-family: Arial, sans-serif; display: grid; place-items: center; background: #f4f9ff; margin: 0; }
+              .box { width: 300px; background: white; border-radius: 16px; box-shadow: 0 10px 28px rgba(0,0,0,.12); padding: 18px; text-align: center; }
+              a { display: block; margin: 12px 0; padding: 10px 14px; border-radius: 10px; text-decoration: none; font-weight: 700; }
+              .fb { background: #1877f2; color: white; }
+              .wa { background: #25d366; color: white; }
+            </style>
+          </head>
+          <body>
+            <div class="box">
+              <h3 style="margin-top:0;">Compartir</h3>
+              <a class="fb" href="${facebookUrl}" target="_blank" rel="noopener">Facebook</a>
+              <a class="wa" href="${whatsappUrl}" target="_blank" rel="noopener">WhatsApp</a>
+            </div>
+          </body>
+        </html>
+      `);
+      chooser.document.close();
     });
   });
 }
@@ -554,8 +886,10 @@ function handleImageFile(file) {
 }
 
 function initModalEvents() {
-  document.getElementById("btnOpenAdmin").addEventListener("click", openModal);
-  document.getElementById("btnEmptyAdd").addEventListener("click", openModal);
+  const btnOpenAdmin = document.getElementById("btnOpenAdmin");
+  const btnEmptyAdd = document.getElementById("btnEmptyAdd");
+  if (btnOpenAdmin) btnOpenAdmin.addEventListener("click", openModal);
+  if (btnEmptyAdd) btnEmptyAdd.addEventListener("click", openModal);
   document.getElementById("modalClose").addEventListener("click", closeModal);
   document.getElementById("modalCancel").addEventListener("click", closeModal);
   modalOverlay.addEventListener("click", (e) => {

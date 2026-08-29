@@ -1,0 +1,24 @@
+[
+  {
+    "id": "p19",
+    "name": "Vaso promocional",
+    "type": "vasos",
+    "month": "cumpleanos",
+    "clientType": "personas",
+    "price": "$15.000",
+    "desc": "Vaso promocional agregado por API.",
+    "image": "./img/vaso.png",
+    "custom": true
+  },
+  {
+    "id": "p18",
+    "name": "Vaso de prueba",
+    "type": "vasos",
+    "month": "cumpleaños",
+    "clientType": "personas",
+    "price": "$15.000",
+    "desc": "Vaso de prueba agregado desde el panel.",
+    "image": "./img/vaso.png",
+    "custom": true
+  }
+]

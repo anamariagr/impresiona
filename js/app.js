@@ -566,6 +566,41 @@ function buildWhatsappLink(productOrName) {
   return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`;
 }
 
+function updateShareMeta(product) {
+  const safeProduct = product || null;
+  const fallbackImage = new URL("img/logochill.png", window.location.href).href;
+  const productUrl = safeProduct ? buildProductShareUrl(safeProduct) : window.location.href.split("?")[0];
+  const productTitle = safeProduct ? `${safeProduct.name} | deTodo` : "deTodo | Recuerdos y Publicidad para tu Iglesia";
+  const productDescription = safeProduct
+    ? safeProduct.desc || "Producto personalizado de deTodo."
+    : "Camisetas, vasos, esferos, trofeos, busos y recuerdos personalizados para cada evento del año de tu iglesia.";
+  const productImage = safeProduct && safeProduct.image ? new URL(safeProduct.image, window.location.href).href : fallbackImage;
+
+  const titleTag = document.querySelector("title");
+  if (titleTag) titleTag.textContent = productTitle;
+
+  const metaMap = {
+    "og:title": productTitle,
+    "og:description": productDescription,
+    "og:image": productImage,
+    "og:url": productUrl,
+    "twitter:title": productTitle,
+    "twitter:description": productDescription,
+    "twitter:image": productImage,
+  };
+
+  Object.entries(metaMap).forEach(([property, value]) => {
+    let meta = document.querySelector(`meta[property="${property}"]`) || document.querySelector(`meta[name="${property}"]`);
+    if (!meta) {
+      meta = document.createElement("meta");
+      if (property.startsWith("og:")) meta.setAttribute("property", property);
+      else meta.setAttribute("name", property);
+      document.head.appendChild(meta);
+    }
+    meta.setAttribute("content", value);
+  });
+}
+
 function buildProductShareUrl(product) {
   if (!product || !product.id) return "";
   const baseUrl = window.location.href.split("?")[0];
@@ -796,7 +831,10 @@ function renderCatalog() {
 function openSharedProduct() {
   const params = new URLSearchParams(window.location.search);
   const id = params.get("product");
-  if (!id) return;
+  if (!id) {
+    updateShareMeta();
+    return;
+  }
 
   let sharedProduct = products.find((p) => p.id === id);
 
@@ -812,7 +850,12 @@ function openSharedProduct() {
     }
   }
 
-  if (!sharedProduct) return;
+  if (!sharedProduct) {
+    updateShareMeta();
+    return;
+  }
+
+  updateShareMeta(sharedProduct);
 
   const filterType = document.getElementById("filterType");
   if (filterType) filterType.value = "todos";

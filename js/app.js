@@ -570,7 +570,7 @@ function updateShareMeta(product) {
   const safeProduct = product || null;
   const fallbackImage = new URL("img/logochill.png", window.location.href).href;
   const productUrl = safeProduct ? buildProductShareUrl(safeProduct) : window.location.href.split("?")[0];
-  const productTitle = safeProduct ? `${safeProduct.name} | deTodo` : "deTodo | Recuerdos y Publicidad para tu Iglesia";
+  const productTitle = safeProduct ? `${safeProduct.name} | Chill` : "deTodo | Recuerdos y para ti personalizados";
   const productDescription = safeProduct
     ? safeProduct.desc || "Producto personalizado de deTodo."
     : "Camisetas, vasos, esferos, trofeos, busos y recuerdos personalizados para cada evento del año de tu iglesia.";

@@ -1,4 +1,4 @@
-const WHATSAPP_NUMBER = "573170999213";
+const WHATSAPP_NUMBER = "573125824515";
 
 const COLOR_MAP = {
   "blanco": "#ffffff",

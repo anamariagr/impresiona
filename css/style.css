@@ -1,6 +1,6 @@
 :root {
   --primary: #6213a3;
-  --primary-dark: #3f0e70;
+  --primary-dark: #1a07b5;
   --primary-light: #7f3bcb;
   --secondary: #29c4ea;
   --secondary-dark: #1fa1ce;
@@ -212,7 +212,7 @@ a { text-decoration: none; color: inherit; }
   display: inline-block;
   margin-top: 12px;
   padding: 0.2em 0.4em;
-  background: linear-gradient(135deg, #ffb454, #f0823a);
+  background: linear-gradient(135deg, #ffb454, #fff400);
   border-radius: 18px;
   color: #fff;
   box-shadow: 0 10px 26px rgba(240,130,58,.35);

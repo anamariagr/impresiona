@@ -9,8 +9,53 @@ app = Flask(__name__, static_folder='')
 CORS(app)
 
 DATA_FILE = 'server_products.json'
+INVENTORY_FILE = 'server_inventory.json'
 UPLOAD_FOLDER = 'uploads'
 Path(UPLOAD_FOLDER).mkdir(exist_ok=True)
+
+DEFAULT_PRODUCTION_TIMES = [
+    {'key': 'vasos', 'label': 'Vasos', 'hechuraMin': 0, 'sublimacionMin': 6, 'notes': ''},
+    {'key': 'camisas', 'label': 'Camisas', 'hechuraMin': 45, 'sublimacionMin': 2, 'notes': ''},
+    {'key': 'placas', 'label': 'Placas', 'hechuraMin': 0, 'sublimacionMin': 5, 'notes': ''},
+    {'key': 'cajas', 'label': 'Cajas', 'hechuraMin': 20, 'sublimacionMin': 4, 'notes': ''},
+    {'key': 'termos', 'label': 'Termos', 'hechuraMin': 0, 'sublimacionMin': 6, 'notes': ''},
+    {'key': 'bolsos', 'label': 'Bolsos', 'hechuraMin': 60, 'sublimacionMin': 2, 'notes': ''},
+    {'key': 'gorras', 'label': 'Gorras', 'hechuraMin': 30, 'sublimacionMin': 3, 'notes': ''},
+    {'key': 'libretas', 'label': 'Libretas', 'hechuraMin': 15, 'sublimacionMin': 2, 'notes': ''},
+]
+
+INVENTORY_SECTIONS = ['supplies', 'movements', 'productionTimes', 'fabrics', 'papers']
+
+def default_inventory():
+    return {
+        'supplies': [],
+        'movements': [],
+        'productionTimes': [dict(t) for t in DEFAULT_PRODUCTION_TIMES],
+        'fabrics': [],
+        'papers': [],
+    }
+
+def load_inventory():
+    if not os.path.exists(INVENTORY_FILE):
+        store = default_inventory()
+        save_inventory(store)
+        return store
+    with open(INVENTORY_FILE, 'r', encoding='utf-8') as f:
+        try:
+            data = json.load(f)
+        except Exception:
+            data = {}
+    if not isinstance(data, dict):
+        data = {}
+    store = default_inventory()
+    for section in INVENTORY_SECTIONS:
+        if isinstance(data.get(section), list):
+            store[section] = data[section]
+    return store
+
+def save_inventory(store):
+    with open(INVENTORY_FILE, 'w', encoding='utf-8') as f:
+        json.dump(store, f, ensure_ascii=False, indent=2)
 
 def load_store():
     if not os.path.exists(DATA_FILE):
@@ -80,6 +125,22 @@ def delete_product(pid):
             except Exception:
                 pass
     return jsonify({'ok': True})
+
+@app.route('/api/inventory', methods=['GET'])
+def get_inventory():
+    return jsonify(load_inventory())
+
+@app.route('/api/inventory', methods=['PUT'])
+def replace_inventory():
+    data = request.get_json(force=True)
+    if not isinstance(data, dict):
+        return jsonify({'error': 'invalid payload'}), 400
+    store = load_inventory()
+    for section in INVENTORY_SECTIONS:
+        if isinstance(data.get(section), list):
+            store[section] = data[section]
+    save_inventory(store)
+    return jsonify(store)
 
 @app.route('/uploads/<path:filename>')
 def uploads(filename):
